@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTCHA Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        canvas { border: 1px solid #000; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>CAPTCHA Generator</h1>
+    <canvas id="captchaCanvas" width="200" height="100"></canvas>
+    <br>
+    <input type="text" id="captchaInput" placeholder="Enter CAPTCHA" />
+    <button id="validateButton">Validate</button>
+    <p id="result"></p>
+    <script>
+        let captchaText = '';
+        function generateCaptcha() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            captchaText = '';
+            for (let i = 0; i < 6; i++) {
+                captchaText += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            const canvas = document.getElementById('captchaCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '40px Arial';
+            ctx.fillStyle = '#000';
+            ctx.fillText(captchaText, 20, 50);
+        }
+        function validateCaptcha() {
+            const userInput = document.getElementById('captchaInput').value;
+            const result = document.getElementById('result');
+            if (userInput === captchaText) {
+                result.textContent = 'CAPTCHA validated!';
+                result.style.color = 'green';
+            } else {
+                result.textContent = 'Invalid CAPTCHA, try again.';
+                result.style.color = 'red';
+                generateCaptcha();
+            }
+        }
+        document.getElementById('validateButton').addEventListener('click', validateCaptcha);
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('url')) {
+                // Handle URL parameter if needed
+            }
+            generateCaptcha();
+        };
+    </script>
+</body>
+</html>
